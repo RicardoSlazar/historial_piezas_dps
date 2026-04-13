@@ -19,33 +19,26 @@ export const PiezasProvider = ({ children }) => {
     }
   };
 
-  // Agregar pieza
   const agregarPieza = async (pieza) => {
-    // Validaciones 
-    if (
-    !pieza.pieza ||
-    !pieza.marca ||
-    !pieza.numeroSerie ||
-    !pieza.precio ||
-    !pieza.fecha
-    ) {
-    alert("Todos los campos son obligatorios");
-    return;
+    // Validaciones
+    if (!pieza.pieza || !pieza.marca || !pieza.numeroSerie || !pieza.fecha) {
+      alert("Todos los campos son obligatorios");
+      return;
     }
 
-    if (isNaN(pieza.precio)) {
-    alert("El precio debe ser un número");
-    return;
-    }
-
-    if (isNaN(new Date(pieza.fecha))) {
-    alert("Fecha inválida");
-    return;
+    // Validar fecha
+    const fechaDate = new Date(pieza.fecha);
+    if (isNaN(fechaDate)) {
+      alert("Fecha inválida");
+      return;
     }
 
     const nueva = {
       id: Date.now().toString(),
-      ...pieza,
+      pieza: String(pieza.pieza),
+      marca: String(pieza.marca),
+      numeroSerie: String(pieza.numeroSerie),
+      fecha: String(pieza.fecha),
     };
 
     const nuevasPiezas = ordenarPorFecha([nueva, ...piezas]);

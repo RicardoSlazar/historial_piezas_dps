@@ -13,9 +13,31 @@ export const guardarDatos = async (data) => {
 export const obtenerDatos = async () => {
   try {
     const data = await AsyncStorage.getItem(KEY);
-    return data ? JSON.parse(data) : [];
+    if (!data) return [];
+
+    const parsed = JSON.parse(data);
+    if (!Array.isArray(parsed)) {
+      console.log("Datos no son un array, limpiando...");
+      await AsyncStorage.removeItem(KEY);
+      return [];
+    }
+    return parsed;
   } catch (error) {
     console.log("Error obteniendo datos:", error);
+
+    try {
+      await AsyncStorage.removeItem(KEY);
+    } catch (cleanError) {
+      console.log("Error al limpiar datos:", cleanError);
+    }
     return [];
+  }
+};
+
+export const limpiarDatos = async () => {
+  try {
+    await AsyncStorage.removeItem(KEY);
+  } catch (error) {
+    console.log("Error al limpiar datos:", error);
   }
 };
